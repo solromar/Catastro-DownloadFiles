@@ -1,0 +1,12 @@
+name: catastro
+recipe: lamp
+config:
+  type: php:7.4
+  webroot: ./public
+services:
+  appserver:
+    type: php:7.4
+    extras:
+      - apt-get update -y
+      - apt-get install poppler-utils -y
+    
