@@ -18,56 +18,60 @@ class CatastroWebController extends AbstractController
         // Datos
         $url = 'https://www1.sedecatastro.gob.es/cycbieninmueble/ovcbusqueda.aspx';
         $referenciaCatastral = '7932704VG4173B0001GE';
+        //9801614YH1590B0008TT
+        //001005700VP10B0001MH
+        //3788601NF3638N0006BS
+        //17341040UF7613S0038RX
+        //8729703YJ1782H0010KD
+        //7099607UK8279N0001PF
+        //7932704VG4173B0001GE
 
-        // Crear el cliente HTTP
+        // Crear cliente HTTP
         $client = HttpClient::create();
 
-        // Realizar una solicitud GET para obtener el HTML de la página web
+        // Hacer solicitud GET inicial
         $response = $client->request('GET', $url);
         $html = $response->getContent();
 
-
-        // Crear un objeto Crawler a partir del HTML 
-        $crawler = new Crawler($html);
-
-
-        // Encontrar el elemento <input> de referencia catastral
-        $inputElement = $crawler->filter('input[name="ctl00$Contenido$txtRC2"][type="text"]')->first();
-        
-        // Establecer el valor de $referenciaCatastral en el atributo 'value' del elemento <input>
-        $inputElement->attr('value', $referenciaCatastral);
-
-        // Obtener el formulario asociado al elemento <input>
-        $form = $inputElement->parents()->filter('form')->first()->form();
-
-
+        // Crear un objeto Crawler a partir del HTML y la URL
+        $crawler = new Crawler($html, $url);
 
         // Encontrar el formulario por su ID
-        //$form = $crawler->filter('#refcat2')->form();
+        $form = $crawler->filter('form#aspnetForm')->form();
 
-
-        // Establecer el valor del campo "Referencia Catastral"
-        //$form['ctl00_Contenido_txtRC2'] = $referenciaCatastral;
+        // Establecer el valor del campo "Referencia catastral"
+        $form['ctl00$Contenido$txtRC2']->setValue($referenciaCatastral);
 
         // Obtener la URL de acción del formulario
         $actionUrl = $form->getUri();
 
         // Enviar el formulario
         $response = $client->request('POST', $actionUrl, [
-            'body' => $form->getValues(),
+            'body' => $form->getPhpValues(),
         ]);
-        /*
-        //Obtiene la URL donde se abre luego de establecer el valor de $referenciaCatastral
-        $client = HttpClient::create();
-        $iframeUrl = $url = 'https://www1.sedecatastro.gob.es/cycbieninmueble/OVCConCiud.aspx?UrbRus=U&RefC= . $referenciaCatastral . &esBice=&RCBice1=&RCBice2=&DenoBice=&from=OVCBusqueda&pest=rc&RCCompleta= .$referenciaCatastral . &final=&del=18&mun=900';
 
-        // Realizar una solicitud GET al URL del iframe        
-        $response = $client->request('GET', $iframeUrl);
-        
+        // Obtener la URL de redireccionamiento
+        $redirectUrl = 'https://www1.sedecatastro.gob.es/cycbieninmueble/OVCConCiud.aspx?UrbRus=U&RefC=' . $referenciaCatastral . '&esBice=&RCBice1=&RCBice2=&DenoBice=&from=OVCBusqueda&pest=rc&RCCompleta=' . $referenciaCatastral . '&final=&del=18&mun=900';;
 
-        // Obtener el contenido del archivo
+        // Hacer solicitud GET al URL de redireccionamiento
+        $response = $client->request('GET', $redirectUrl);
+        $html = $response->getContent();
+
+        // Crear un objeto Crawler para el resultado HTML
+        $crawler = new Crawler($html, $redirectUrl);
+
+        // Encontrar el enlace de "Imprimir Datos"
+        $imprimirDatosLink = $crawler->filter('a#BImprimirDatos');
+        $imprimirDatosUrl = $imprimirDatosLink->attr('href');
+
+        // Construir la URL completa del enlace "Imprimir Datos"
+        $imprimirDatosUrl = 'https://www1.sedecatastro.gob.es/cycbieninmueble/' . $imprimirDatosUrl;
+
+        // Hacer solicitud GET a la URL de "Imprimir Datos"
+        $response = $client->request('GET', $imprimirDatosUrl);
         $fileContent = $response->getContent();
 
+        //------------------------------------------  GUARDAR EL ARCHIVO PDF ---------------------------------------------------------------
 
         $directoryPath = '/app/public/ficheros/';
         if (!is_dir($directoryPath)) {
@@ -82,11 +86,10 @@ class CatastroWebController extends AbstractController
             file_put_contents($filePath, $fileContent);
 
 
+
             // Obtener el contenido de la respuesta
             $resultHtml = $response->getContent();
         }
-
-*/
-        return $this->json("Archivo descargado exitosamente");
+        return $this->json('Archivo descargado exitosamente');
     }
 }

@@ -1,0 +1,489 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head><title>
+	Sede Electrónica del Catastro - Consulta y certificación de Bien Inmueble
+</title><meta charset="utf-8" /><meta http-equiv="X-UA-Compatible" content="IE=edge" /> 
+<!-- Mobile Metas -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<!-- Bootstrap core CSS -->
+<link href="/MasterPage/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+<link href="/MasterPage/css/ie10-viewport-bug-workaround.css" rel="stylesheet" type="text/css" /><link href="/MasterPage/css/print.css" type="text/css" rel="stylesheet" media="print" /><link href="/masterpage/fonts/fontawesome-free-5.5.0-web/css/all.css" type="text/css" rel="stylesheet" /><link href="/MasterPage/fonts/font-awesome-4.7.0/css/font-awesome.min.css" type="text/css" rel="stylesheet" /><link href="/MasterPage/css/noframes2.css" type="text/css" rel="stylesheet" /><link href="/RecursosComunes/Estilos/jquery-ui.css" rel="stylesheet" type="text/css" /> 
+<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+<!--[if lt IE 9]>
+<script src="/MasterPage/js/html5shiv.min.js"></script>
+<script src="/MasterPage/js/respond.min.js"></script>
+<![endif]-->
+<script src="/MasterPage/js/modernizr.js"></script>
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="/MasterPage/js/jquery.min.js"></script>
+<!-- Cargamos el jquery-ui.js antes de bootstrap.min.js para resolver bug de tooltip y que prevalezca bootstrap -->
+<script src="/RecursosComunes/Jquery/jquery-ui.js"></script>
+<script src="/MasterPage/js/bootstrap.min.js"></script>
+<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+<script src="/MasterPage/js/custom.js"></script>
+<script src="/RecursosComunes/Jquery/BloqueoPantalla.js"></script>
+ 
+<!-- Scripts y CSS genéricos de Jquery. Se incluyen con cualquier componente -->
+    
+
+  
+
+<script>
+
+function MPOnLoad() {
+if (window.body_onload != null)
+window.body_onload();
+
+}
+function DameElementById(elemento) {
+var idElemento;
+var control;
+idElemento = 'ctl00_Contenido_' + elemento;
+control = document.getElementById(idElemento);
+return control;
+}
+function DameElementByName(elemento) {
+var idElemento;
+var namElemento;
+var control;
+idElemento = 'ctl00_Contenido_';
+namElemento = idElemento.replace(/\_/g, '$') + elemento;
+control = document.getElementsByName(namElemento);
+return control;
+}
+function ocultaImagen() {
+document.getElementById("MBody").style.backgroundImage = "none";
+}
+function ocultaMarcoLateral() {
+            
+document.getElementById("contenido_nf").style.width = "100%";
+document.getElementById("contenido_nf").style.marginLeft = "0px";
+document.getElementById("contenido_nf").style.paddingLeft = "0px";
+
+}
+               
+function RecuperarIdioma(idioma) {
+var hi;
+hi = document.getElementById("ctl00_hdIdioma");
+hi.value = idioma;
+}
+var HoraCatastro;
+var refresco = 0;
+var HoraAnterior = new Date;
+var HoraNueva;
+function mueveReloj() {
+var anio;
+var mes;
+var dia;
+var hora;
+var minuto;
+var segundo;
+var reloj;
+var fechaYhora;
+var diferencia;
+var formulario;
+
+if (refresco >= 3600) {
+formulario = document.getElementById("aspnetForm");
+formulario.submit();
+} else {
+
+reloj = $("#tbreloj");
+
+if (HoraCatastro != null) {
+HoraNueva = new Date;
+anio = HoraCatastro.getFullYear();
+mes = HoraCatastro.getMonth() + 1;
+dia = HoraCatastro.getDate();
+hora = HoraCatastro.getHours();
+minuto = HoraCatastro.getMinutes();
+segundo = HoraCatastro.getSeconds();
+
+str_anio = new String(anio);
+if (str_anio.length == 1)
+anio = "0" + anio;
+str_mes = new String(mes);
+if (str_mes.length == 1)
+mes = "0" + mes;
+str_dia = new String(dia);
+if (str_dia.length == 1)
+dia = "0" + dia;
+str_segundo = new String(segundo);
+if (str_segundo.length == 1)
+segundo = "0" + segundo;
+str_minuto = new String(minuto);
+if (str_minuto.length == 1)
+minuto = "0" + minuto;
+str_hora = new String(hora);
+if (str_hora.length == 1)
+hora = "0" + hora;
+
+fechaYhora = dia + "/" + mes + "/" + anio + "  " + hora + ":" + minuto + ":" + segundo;
+
+reloj.val(fechaYhora);
+if (HoraAnterior != null) {
+diferencia = HoraNueva.getTime() - HoraAnterior.getTime();
+} else {
+diferencia = 1000;
+}
+HoraCatastro.setTime(HoraCatastro.getTime() + diferencia);
+refresco = refresco + (diferencia / 1000);
+HoraAnterior = new Date;
+setTimeout("mueveReloj()", 1000);
+}
+}
+}
+
+$.widget.bridge('uitooltip', $.ui.tooltip);
+
+function ElegirAcceso(titulo, LlamadaCert, LlamadaPin) {
+
+var hi;
+hi = $('#ctl00_hdVerModal');
+hi.value = 'S';
+
+}
+
+function obtenerRecurso(codigo) {
+var recurso;
+if (codigo == "aceptar") {
+recurso = 'Aceptar';
+}
+return recurso;
+};
+
+           
+</script>
+      
+</head>
+<body id="MBody" onload="javascript:mueveReloj();MPOnLoad();">
+<form method="post" action="./SECImprimirDatos.aspx?RefC=7099607UK8279N0001PF&amp;del=45&amp;mun=179&amp;UrbRus=U&amp;final=" id="aspnetForm">
+<input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="/wEPDwUKLTc5MjY1MjkyMg8WBh4HcGVybWlzb2geCmNvZFVzdWFyaW9lHhNWYWxpZGF0ZVJlcXVlc3RNb2RlAgEWAmYPZBYEAgEPZBYEAgcPFgIeBXN0eWxlBQ5kaXNwbGF5OmJsb2NrOxYUAgEPZBYEAgEPFgIeA3NyYwUcL01hc3RlclBhZ2UvaW1nL2xvZ29zZWRlLnBuZ2QCAw8WAh8EBR0vTWFzdGVyUGFnZS9pbWcvbG9nb3NlZGUyLnBuZ2QCAg8WAh4HVmlzaWJsZWhkAgMPDxYEHgRUZXh0ZR4HVG9vbFRpcGVkZAIEDxYEHgRocmVmBS9odHRwczovL3d3dzEuc2VkZWNhdGFzdHJvLmdvYi5lcy9PVkNJbmljaW8uYXNweB8FaBYCZg8WAh8FaGQCBg8WAh8FaBYCZg8WAh8GBQpDYXN0ZWxsYW5vZAIHDw8WAh4NT25DbGllbnRDbGljawUVUmVjdXBlcmFySWRpb21hKCdlcycpZGQCCA8PFgIfCQUVUmVjdXBlcmFySWRpb21hKCdnbCcpZGQCCQ8PFgIfCQUVUmVjdXBlcmFySWRpb21hKCdjYScpZGQCCg8PFgIfCQUVUmVjdXBlcmFySWRpb21hKCdlbicpZGQCDA9kFgYCAQ8WAh8FaBYIAgMPDxYCHwVoZGQCBQ8PFgIfBWhkZAIHDw8WAh8FaGRkAgkPDxYCHwVoZGQCAw8WBB8IBS9odHRwczovL3d3dzEuc2VkZWNhdGFzdHJvLmdvYi5lcy9PVkNJbmljaW8uYXNweB8FaBYCZg8WAh8FaGQCBQ8PFgIfBWhkZAIJD2QWDAILDw8WAh8GBQkyNi82LzIwMjNkZAIPDw8WAh8GBQgxODoyMzoxMmRkAhUPFgIfBWgWAgIDDxYCHwVoZAIXD2QWAgIDD2QWAgIBD2QWAgIBDxYCHwQFbC4uL0NhcnRvZ3JhZmlhL0dlbmVyYUdyYWZpY29QYXJjZWxhLmFzcHg/ZGVsPTQ1Jm11bj0xNzkmcmVmY2F0PTcwOTk2MDdVSzgyNzlOJkFuY2hvUGl4ZWxzPTEyMCZBbHRvUGl4ZWxzPTEyMGQCGQ8WAh8FaBYCAgMPFgIfBWhkAh0PFgIfBWgWAgIDDxYCHwVoZAICDxYCHwMFDWRpc3BsYXk6bm9uZTtkZMVLDxpYnGXkHAoiLxB27/po1IGP" />
+
+<script>var HoraCatastro = new Date(2023,5,26,18,23,12); </script>
+<input type="hidden" name="__VIEWSTATEGENERATOR" id="__VIEWSTATEGENERATOR" value="40FBE4EB" />
+<input type="hidden" name="__EVENTVALIDATION" id="__EVENTVALIDATION" value="/wEdAAhhUKD1fSYAeQyaAsUt+Ld9jFenixtOJzKelTV6T3vIB7rC8htPUyu999UCLNFMqh30mbP4hpNdRplVWOBHNOFdkQknI/WCJD4JVpqBNLWmsTm0dzejSmfiyAL6IjDZxDgvCkXnh80KV4hxtgtfufuCaSDPmHZU5+8DS7xOUl2Zr7i4NgOtMh9zJZZj7NagSavFPvwd" />
+<fieldset class='fieldsetoculto'><legend class='legendoculto sr-only'>Formulario master</legend>
+<input name="ctl00$hdIdioma" type="hidden" id="ctl00_hdIdioma" value="es" />
+<input name="ctl00$hdFinalidadMaestra" type="hidden" id="ctl00_hdFinalidadMaestra" />
+<input name="ctl00$hdVerModal" type="hidden" id="ctl00_hdVerModal" value="N" />
+        
+		    
+
+
+<div id="ctl00_muestraCabecera" style="display:block;">
+	
+<nav class="navbar navbar-default">
+<div id="cabecera_nf" ><!-- CABECERA -->
+<div id="escudogob_nf" >
+<div id="ctl00_escudogob1_nf"><img src="/MasterPage/img/escudo.gif" alt="Escudo" width="44" height="45"></div>
+</div>
+<div id="contenidocab_nf">
+<div id="contenidocab3_nf"  >
+<input name="tbreloj" type="text" readonly id="tbreloj" aria-label="reloj" />
+</div>
+<div id="contenidocab4_nf" >
+<div id="ctl00_divLogos" class="navbar-header">
+<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+<span class="sr-only">Toggle navigation</span>
+<span class="icon-bar"></span>
+<span class="icon-bar"></span>
+<span class="icon-bar"></span>
+</button>
+<a class="navbar-brand"  href="#"><img src="/MasterPage/img/logosede.png" id="ctl00_imglogosede" alt="Acceso a la Sede Electrónica del Catastro" /></a>
+<a class="navbar-brand2"  href="#"><img src="/MasterPage/img/logosede2.png" id="ctl00_imglogosede2" alt="Acceso a la Sede Electrónica del Catastro" /></a>
+</div>
+<div id="navbar" class="navbar-collapse collapse">
+<ul class="nav navbar-nav navbar-right">
+<li class="usuario" style="padding-top:9px;"> <span id="ctl00_lblUsuario" class="control-label"></span> </li>
+<li  style="padding-top:3px;"></li>
+<li style="visibility:hidden"><a href="http://www.catastro.meh.es/ayuda" target="_blank">Ayuda</a></li>
+<li class="dropdown">
+
+<ul class="dropdown-menu">
+<li><input type="submit" name="ctl00$Lenguaje_Esp" value="Castellano" onclick="RecuperarIdioma(&#39;es&#39;);" id="ctl00_Lenguaje_Esp" title="Castellano" class="btn btn-link small" /></li>
+<li><input type="submit" name="ctl00$Lenguaje_Gal" value="Galego" onclick="RecuperarIdioma(&#39;gl&#39;);" id="ctl00_Lenguaje_Gal" title="Galego" class="btn btn-link small" /></li>
+<li><input type="submit" name="ctl00$Lenguaje_Cat" value="Català" onclick="RecuperarIdioma(&#39;ca&#39;);" id="ctl00_Lenguaje_Cat" title="Català" class="btn btn-link small" /></li>
+<li><input type="submit" name="ctl00$Lenguaje_Ing" value="English" onclick="RecuperarIdioma(&#39;en&#39;);" id="ctl00_Lenguaje_Ing" title="English" class="btn btn-link small" /></li>
+</ul>
+</li>
+<li><a href="http://www.catastro.minhap.es/ayuda/EnsConInfCont.html" id="ctl00_aContactenos" class="btn btn-default btn-sm bg-gray text-uppercase gray6" target="_blank" title="Abre en nueva ventana">
+<i class="glyphicon glyphicon glyphicon-envelope"></i><span class="sr-only">Icono correo electrónico</span> Contáctenos</a></li>
+</ul>
+</div><!--/.nav-collapse -->
+</div>
+<div id="contenidocab5_nf"  >
+<div id="ctl00_contenido_miga">
+
+<ul  class="menu_opciones1 ">
+<li></li>
+<li></li></ul>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalAccesosPgMaestra" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog">
+<div class="modal-dialog" role="document">
+<div class="modal-content">
+<div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span></button><h2 class="modal-title">Seleccione el tipo de autenticación</h2>
+</div>
+<div class="modal-body">
+<div class="form-horizontal">
+<div class="row form-group">
+<div  class="col-sm-10 ">
+<a id="ctl00_aAccesoCert"><img src="/masterpage/img/ico_certificado.png" width="12" height="19" alt="icono certificado electrónico"> &nbsp;&nbsp;Certificado electrónico de identificación o DNI electrónico</a>
+</div>
+</div>
+<div class="row form-group">
+<div  class="col-sm-10 ">
+<a href="../MasterPage/_parent" id="ctl00_aAccesoClavePIN" target="_parent"><img src="/masterpage/img/ico_clave.png" width="39" height="12"  alt="icono clave-PIN" /> &nbsp;&nbsp;Cl@ve PIN - Cl@ve permanente</a>
+</div>
+</div>
+</div>
+</div>
+<div class="modal-footer"><button type="button" class="btn btn-sec" data-dismiss="modal" id="btnCerrarModalCSV"> 
+Cerrar</button>
+</div>
+</div>
+</div>
+</div>  
+<script>
+var hi2;
+hi2 = document.getElementById("ctl00_hdVerModal");
+if (hi2.value == 'S') { var content = $('#modalAccesosPgMaestra'); content.innerHTML = '<iframe width="100%" height="100%" frameborder="0" name="ifrAut" allowtransparency="true"></iframe>'; $('#modalAccesosPgMaestra').modal('show'); };
+
+</script>
+</div>
+</nav><!--fin  CABECERA -->
+</div>  
+
+<div id="contenido_nf" class="container theme-showcase" role="main">
+
+  <div class="page-header">
+                            <h1>
+        Consulta y certificación de Bien Inmueble
+               </h1>
+     </div>
+       
+         
+          
+                     <!-- Inicio tabla datos consulta -->
+
+      <div class="panel panel-sec" id="tblFechaHora">
+                  <div class="panel-heading ">Fecha y hora</div>
+                 <div class="panel-body">
+                    <div  class="form-horizontal" >
+                        <DIV class="form-group">
+                            <div class="col-md-4 control-label" id="pp">Fecha</div>
+                            <DIV class="col-md-8" aria-describedby="pp"><label  class="control-label black text-left"><span id="ctl00_Contenido_TextoFecha">26/6/2023</span></label></DIV>
+                        </div>
+                        <DIV class="form-group">
+                            <div class="col-md-4 control-label">Hora</div>
+                            <DIV class="col-md-8"><label  class="control-label black text-left"><span id="ctl00_Contenido_TextoHora">18:23:12</span></label></DIV>
+                        </div>
+                        
+                </div>
+
+                    
+                 </div>
+         </div>
+         
+
+
+
+       <div class="panel panel-sec">
+                  <div class="panel-heading amarillo">DATOS DESCRIPTIVOS DEL INMUEBLE</div>
+                 <div class="panel-body">
+
+              <div id="ctl00_Contenido_tblInmueble" class="form-horizontal" name="tblInmueble">
+                    
+                 <DIV class="form-group"><span class="col-md-4 control-label">Referencia catastral</span><DIV class="col-md-8"><span class="control-label black"><label  class='control-label black text-left'>7099607UK8279N0001PF</label></span></DIV></DIV><DIV class="form-group"><span class="col-md-4 control-label">Localización</span><DIV class="col-md-8"><span class="control-label black"><label  class='control-label black text-left'>CL RUA 3<br>45526 SANTO DOMINGO-CAUDILLA (TOLEDO)</label></span></DIV></DIV><DIV class="form-group"><span class="col-md-4 control-label">Clase</span><DIV class="col-md-8"><span class="control-label black"><label  class='control-label black text-left'>Urbano</label></span></DIV></DIV><DIV class="form-group"><span class="col-md-4 control-label">Uso principal</span><DIV class="col-md-8"><span class="control-label black"><label  class='control-label black text-left'>Residencial</label></span></DIV></DIV><DIV class="form-group"><span class="col-md-4 control-label">Superficie construida(*)</span><DIV class="col-md-8"><span class="control-label black"><label  class='control-label black text-left'>321 m<sup>2</sup></label></span></DIV></DIV><DIV class="form-group"><span class="col-md-4 control-label">Año construcción </span><DIV class="col-md-8"><span class="control-label black"><label  class='control-label black text-left'> 1960</label></span></DIV></DIV></div>
+
+
+
+
+                </div></div>
+         
+            
+        
+         <div id="ctl00_Contenido_divtblfinca" class="panel panel-sec"> 
+                 <div class="panel-heading amarillo">    PARCELA CATASTRAL</div>
+                 <div class="panel-body">
+
+
+                      <div id="ctl00_Contenido_trFinca" class="col-md-2 text-center ">
+                          <a href="#" id="ctl00_Contenido_AMostrarCarto" name="AMostrarCarto">
+                             <img src="../Cartografia/GeneraGraficoParcela.aspx?del=45&mun=179&refcat=7099607UK8279N&AnchoPixels=120&AltoPixels=120" id="ctl00_Contenido_ImgMapa" name="ImgMapa" onerror="JavaScript:OcultarCarto();" alt="Pulse para localizar la parcela en el mapa" title="Pulse para localizar la parcela en el mapa" />
+
+                           </a></div>
+                        <div id="ctl00_Contenido_tblFinca" class="col-md-10 form-horizontal">
+                        <DIV class="form-group"><DIV class="col-md-12"><span class="control-label black">Parcela construida sin división horizontal</span></DIV></DIV><DIV class="form-group"><span class="col-md-3 control-label">Localización</span><DIV class="col-md-9"><span class="control-label black"><label  class='control-label black text-left'>CL RUA 3<br>SANTO DOMINGO-CAUDILLA (TOLEDO)</label></span></DIV></DIV><DIV class="form-group"><span class="col-md-3 control-label">Superficie gráfica</span><DIV class="col-md-9"><span class="control-label black"><label  class='control-label black text-left'>594 m<sup>2</sup></label></span></DIV></DIV></div>
+                      
+                     
+                     
+                     
+                     
+                 </div>
+               </div>
+            
+            
+         <div id="ctl00_Contenido_divtblLocales" class="panel panel-sec">
+                  <div class="panel-heading amarillo"> CONSTRUCCIÓN</div>
+                               <div class="panel-body">
+                 <div class="table-responsive">      
+            <table id="ctl00_Contenido_tblLocales" class="table">
+	<tr>
+		<td class="cat2centrado"><span>Uso principal</span></td>
+		<td class="cat2centrado"><span>Escalera</span></td>
+		<td class="cat2centrado"><span>Planta</span></td>
+		<td class="cat2centrado"><span>Puerta</span></td>
+		<td class="cat2centrado"><span>Superficie m<sup>2</sup></span></td>
+	</tr>
+	<tr>
+		<td align="center"><span>VIVIENDA</span></td>
+		<td align="center"><span>1</span></td>
+		<td align="center"><span>00</span></td>
+		<td align="center"><span></span></td>
+		<td align="center"><span>66</span></td>
+	</tr>
+	<tr>
+		<td align="center"><span>VIVIENDA</span></td>
+		<td align="center"><span>1</span></td>
+		<td align="center"><span>00</span></td>
+		<td align="center"><span></span></td>
+		<td align="center"><span>102</span></td>
+	</tr>
+	<tr>
+		<td align="center"><span>APARCAMIENTO</span></td>
+		<td align="center"><span>1</span></td>
+		<td align="center"><span>00</span></td>
+		<td align="center"><span></span></td>
+		<td align="center"><span>51</span></td>
+	</tr>
+	<tr>
+		<td align="center"><span>ALMACEN</span></td>
+		<td align="center"><span>1</span></td>
+		<td align="center"><span>00</span></td>
+		<td align="center"><span></span></td>
+		<td align="center"><span>5</span></td>
+	</tr>
+	<tr>
+		<td align="center"><span>ALMACEN</span></td>
+		<td align="center"><span>1</span></td>
+		<td align="center"><span>00</span></td>
+		<td align="center"><span></span></td>
+		<td align="center"><span>97</span></td>
+	</tr>
+</table>
+</div></div></div>
+            
+            
+            
+        
+  
+<script   type="text/javascript">
+
+    window.print();
+    setTimeout("window.close();", 1000);
+
+
+    function OcultarCarto() {
+        var objMapa;
+        objMapa = DameElementById("ImgMapa");
+        objMapa.src = '../Imagenes/no-carto.png';
+    }
+		</script>
+
+
+</div>
+</fieldset>
+</form>
+<div id="ctl00_divPie" style="display:none;">
+
+<footer id="ctl00_piepgmaestra" class="footer">
+<div class="container" >
+<div class="row">
+<div class= "single-footer-widget" id="linksPie">
+<ul class="list-unstyled">
+<li class="liborderbottom col-md-3"><a href="http://www.catastro.minhap.es/ayuda/normativasec.htm" id="ctl00_aNormativaReguladora" target="_blank">Normativa reguladora</a></li>
+<li class="liborderbottom col-md-3"><a href="http://www.catastro.minhafp.es/ayuda/Politica_privacidad.htm" id="ctl00_aPoliticaPrivacidad" target="_blank">Política de privacidad</a></li>
+<li class="liborderbottom col-md-3"><a href="http://www.catastro.minhap.es/ayuda/accesibilidad.htm" id="ctl00_a1" target="_blank">Accesibilidad</a></li>
+<li class="liborderbottom  col-md-3"><a href="http://www.catastro.minhap.es/ayuda/mapaweb.htm" id="ctl00_a5" target="_blank">Mapa web</a></li>
+</ul>           
+</div>
+</div>
+</div>
+</footer>
+</div>
+    
+<script>
+    //Activación de tooltips y popover
+    $(function () { $('[data-toggle="tooltip"]').tooltip() })
+    $(function () { $('[data-toggle="popover"]').popover() })
+</script>  
+<a id="back-to-top" href="#" class="btn btn-sec2 btn-lg back-to-top" role="button" title="Volver arriba"><span class="glyphicon glyphicon-chevron-up" > </span> <span style="display:none;">Volver arriba</span></a>
+<script src="/MasterPage/js/js.cookie.js"></script>
+
+<!-- ################################################################################### -->   
+<!-- ################################### CODIGO GA ##################################### -->    
+<!-- ################################################################################### -->    
+    
+<link rel="stylesheet" type="text/css" href="/MasterPage/css/divcookies.css" />
+<script src="/MasterPage/js/jsdivcookies.js" data-cfasync="false"></script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-6B3M3WQH6C"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('consent', 'default', {
+'ad_storage': 'denied',
+'analytics_storage': 'denied'  });
+gtag('js', new Date());
+gtag('config', 'G-6B3M3WQH6C');
+function consentGranted() {
+gtag('consent', 'update', {
+'ad_storage': 'denied',
+'analytics_storage': 'granted'});
+}
+window.addEventListener('load', function(){
+    window.cookieconsent.initialise({
+        revokeBtn: "<div class='cc-revoke'></div>",
+        type: "opt-in",
+        theme: "classic",
+        palette: {
+        popup: {
+        background: "#fff",
+        text: "#333"},
+        button: {
+        background: "#2885a4",
+        text: "#fff"}
+        },
+        content: {
+        message: "Este sitio web utiliza cookies propias y de terceros para el correcto funcionamiento y visualización del sitio web por parte del usuario, así como la recogida de estadísticas tal y como se recoge en la ",
+        link: "Política de privacidad",
+        allow: "Aceptar cookies",
+        deny: "Denegar cookies",
+        href: "http://www.catastro.minhafp.es/ayuda/Politica_privacidad.htm"},
+        onInitialise: function(status) {
+        if(status == cookieconsent.status.allow) consentGranted();
+        },
+        onStatusChange: function(status) {
+        if (this.hasConsented()) consentGranted();
+        }
+        })
+    });
+</script>
+<!-- ################################################################################### -->   
+<!-- ################################### FIN CODIGO GA ################################# -->    
+<!-- ################################################################################### -->    
+
+
+</body>
+
+
+
+</html>
