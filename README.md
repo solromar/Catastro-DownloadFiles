@@ -1,1 +1,1 @@
-Se le pasa la referencia catastral por $referenciaCatastral y descarga la informacion relativa al inmueble consultado desde la sefe electronica de Catastro
+Se le pasa la referencia catastral por $refCat y descarga la informacion relativa al inmueble consultado desde la sede electronica de Catastro
