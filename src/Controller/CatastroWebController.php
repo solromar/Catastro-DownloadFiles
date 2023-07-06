@@ -13,11 +13,13 @@ class CatastroWebController extends AbstractController
     /**
      * @Route("/catastro/web", name="app_catastro_web")
      */
+
+     
     public function interactWithWebsite()
     {
         // Datos
         $url = 'https://www1.sedecatastro.gob.es/cycbieninmueble/ovcbusqueda.aspx';
-        $referenciaCatastral = '7932704VG4173B0001GEG';
+        $referenciaCatastral = '7932704VG4173B0001GE';
         //9801614YH1590B0008TT
         //001005700VP10B0001MH
         //3788601NF3638N0006BS
@@ -44,11 +46,15 @@ class CatastroWebController extends AbstractController
 
         // Obtener la URL de acción del formulario
         $actionUrl = $form->getUri();
+       
 
         // Enviar el formulario
         $response = $client->request('POST', $actionUrl, [
-            'body' => $form->getPhpValues(),
+            'body' => $form->getPhpValues(),           
         ]);
+
+        
+        
         // Obtener la URL de redireccionamiento
         //$redirectUrl = $response->getInfo('url');
         $redirectUrl = 'https://www1.sedecatastro.gob.es/cycbieninmueble/OVCConCiud.aspx?UrbRus=U&RefC=' . $referenciaCatastral . '&esBice=&RCBice1=&RCBice2=&DenoBice=&from=OVCBusqueda&pest=rc&RCCompleta=' . $referenciaCatastral . '&final=&del=18&mun=900';
