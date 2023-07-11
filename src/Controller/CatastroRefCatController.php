@@ -78,14 +78,15 @@ class CatastroRefCatController extends AbstractController
             'superficieConstruida' => null,
             'coeficienteParticipacion' => null,
             'fechaConstruccion' => null,
-            'listadoConstrucciones' => null
+            'listadoConstrucciones' => null,
+            'listadoInmuebles' => null
         ];
 
         $result = [];
         $provincia = ''; // Opcional
         $municipio = ''; // Obligatorio si se pone provincia sino es opcional
-        $refCat = '001005700VP10B0001MH'; // Obligatorio, es un codigo de numeros y letras, pueden ser 7/14/18 o 20
-
+        $refCat = '1861951VK4616B'; // Obligatorio, es un codigo de numeros y letras, pueden ser 7/14/18 o 20
+//1861951VK4616B      //9801614YH1590B0008TT
         $requestData = [
             'Provincia' => $provincia,
             'Municipio' => $municipio,
@@ -132,7 +133,7 @@ class CatastroRefCatController extends AbstractController
                     'escalera' => $escalera,
                     'planta' => $planta,
                     'puerta' => $puerta,
-                    'superficiem2' => $superficie,
+                    'superficie m2' => $superficie,
                 ];
             }
 
@@ -208,13 +209,14 @@ class CatastroRefCatController extends AbstractController
         } elseif (strlen($refCat) === 14) {
             $lrcdnp = $xml->xpath('//ns:lrcdnp/ns:rcdnp');
 
-            foreach ($lrcdnp as $key => $rcdnp) {
+            foreach ($lrcdnp as $rcdnp) {
                 $pc1 = isset($rcdnp->rc->pc1) ? (string) $rcdnp->rc->pc1 : '';
                 $pc2 = isset($rcdnp->rc->pc2) ? (string) $rcdnp->rc->pc2 : '';
                 $car = isset($rcdnp->rc->car) ? (string) $rcdnp->rc->car : '';
                 $cc1 = isset($rcdnp->rc->cc1) ? (string) $rcdnp->rc->cc1 : '';
                 $cc2 = isset($rcdnp->rc->cc2) ? (string) $rcdnp->rc->cc2 : '';
                 $referenciaCatastral = $pc1 . $pc2 . $car . $cc1 . $cc2; // Construir la referencia catastral completa
+
                 $codigoProvinciaIne = isset($rcdnp->dt->loine->cp) ? (string) $rcdnp->dt->loine->cp : '';
                 $codigoMunicipioIne = isset($rcdnp->dt->loine->cm) ? (string) $rcdnp->dt->loine->cm : '';
                 $codigoMunicipioDgc = isset($rcdnp->dt->cmc) ? (string) $rcdnp->dt->cmc : '';
@@ -231,23 +233,29 @@ class CatastroRefCatController extends AbstractController
                 $distritoMunicipal = isset($rcdnp->dt->locs->lous->lourb->dm) ? (string) $rcdnp->dt->locs->lous->lourb->dm : '';
 
                 
-                $payload['referenciaCatastral'] = $referenciaCatastral;
-                $payload['codigoProvinciaINE'] = $codigoProvinciaIne;
-                $payload['codigoMunicipioINE'] = $codigoMunicipioIne;
-                $payload['codigoMunicipioDGC'] = $codigoMunicipioDgc;
-                $payload['nombreProvincia'] = $nombreProvincia;
-                $payload['nombreMunicipio'] = $nombreMunicipio;
-                $payload['localizacionUrbana']['codigoVia'] = $codigoVia;
-                $payload['localizacionUrbana']['tipoVia'] = $tipoVia;
-                $payload['localizacionUrbana']['nombreVia'] = $nombreVia;
-                $payload['localizacionUrbana']['primerNumero'] = $primerNumero;
-                $payload['localizacionUrbana']['segundoNumero'] = $segundoNumero;
-                $payload['localizacionUrbana']['planta'] = $planta;
-                $payload['localizacionUrbana']['puerta'] = $puerta;
-                $payload['localizacionUrbana']['codigoPostal'] = $codigoPostal;
-                $payload['localizacionUrbana']['distritoMunicipal'] = $distritoMunicipal;
+                $rcdpnData[] = [
+                    'Referencia Catastral' => $referenciaCatastral,
+                    'Codigo Provincia INE' => $codigoProvinciaIne,
+                    'Codigo Municipio INE' => $codigoMunicipioIne,
+                    'Codigo Municipio DGC' => $codigoMunicipioDgc,
+                    'NombreProvincia' => $nombreProvincia,
+                    'NombreMunicipio' => $nombreMunicipio,
+                    'Codigo de Via' => $codigoVia,
+                    'Tipo de Via'=> $tipoVia,
+                    'Nombre de Via'=> $nombreVia,
+                    'Primer Numero'=> $primerNumero,
+                    'Segundo Numero'=> $segundoNumero,
+                    'Planta'=>  $planta,
+                    'Puerta'=>  $puerta,
+                    'Codigo Postal'=> $codigoPostal,
+                    'Distrito Municipal'=> $distritoMunicipal,
+                    
+                ]; 
             }
+            $payload['listadoInmuebles'] = $rcdpnData;
             $result[] = $payload;
+            
+        
             //-----------------------------------------------FIN de ejecucion de codigo para $refCat de 14 caracteres  -------------------------------------------------------
         } else {
             $result = ['ERROR' => 'Longitud Invalida, por favor verifique'];
